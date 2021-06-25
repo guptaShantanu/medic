@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medic/CommonWidget/medic_diet_entry.dart';
 import 'package:medic/CommonWidget/medic_doctor_tile.dart';
+import 'package:medic/Dummy/added_doctor.dart';
+import 'package:medic/Screens/add_doctor.dart';
+import 'package:medic/Screens/all_prescriptions.dart';
 import 'package:medic/Screens/diet_screen.dart';
 import 'package:medic/constants.dart';
 
@@ -57,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
                         '${dayName[currentDate.weekday]} - ${currentDate.day}, ${currentDate.month}, ${currentDate.year} ',
                         style: TextStyle(
                           color: Medic.mainColor,
-                          fontSize: 25.0
+                          fontSize: 20.0
                         ),
                       ),
                     ),
@@ -81,32 +84,58 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: Drawer(
         child: Container(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(20.0),
           color: Medic.mainColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 height: 200.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CircleAvatar(
+                      radius: 40.0,
+                      backgroundColor: Medic.mainColor,
+                      child: Icon(Icons.person,color: Colors.white,size: 70.0,),
+                    ),
+                    Text('Username',style: TextStyle(color: Colors.white,fontSize: 20.0),)
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 2.0,
                 color: Colors.white,
               ),
               SizedBox(height: 20.0,),
-              Text('Add doctor',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25.0
-              ),),
-              SizedBox(height: 20.0,),
-              Text('Prescription',
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AddDoctorScreen()));
+                },
+                child: Text('Add doctor',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0
+                  color: Colors.white,
+                  fontSize: 20.0
                 ),),
+              ),
+              SizedBox(height: 20.0,),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AllPrescription()));
+                },
+                child: Text('Prescription',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0
+                  ),),
+              ),
               SizedBox(height: 20.0,),
               Text('Appointments',
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0
+                    fontSize: 20.0
                 ),),
               SizedBox(height: 20.0,),
               GestureDetector(
@@ -116,14 +145,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: Text('Diet History',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25.0
+                      fontSize: 20.0
                   ),),
               ),
               SizedBox(height: 20.0,),
               Text('Logout',
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0
+                    fontSize: 20.0
                 ),),
             ],
           ),
@@ -135,22 +164,20 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: ()=>_openDietBottomSheet(context),
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              MedicDoctorTile(
-                title: 'Dr. Vijaynath',
-                subtitle: 'Neurologist',
-              ),
-              MedicDoctorTile(
-                title: 'Dr. Sriverem',
-                subtitle: 'Dermatologist',
-              ),
-              MedicDoctorTile(
-                title: 'Dr. Handa',
-                subtitle: 'Pediatricians',
-              ),
-            ],
+        child: RefreshIndicator(
+          onRefresh: ()async{
+            await Future<void>.delayed(Duration(seconds: 2));
+            setState(() {
+
+            });
+          },
+          child: Container(
+            child: ListView.builder(
+              itemCount: addedDoctors.length,
+              itemBuilder: (context,index){
+                return MedicDoctorTile(title: addedDoctors[index].name,subtitle: addedDoctors[index].category,);
+              },
+            ),
           ),
         ),
       ),

@@ -11,7 +11,7 @@ class RightMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 60.0),
+      margin: EdgeInsets.only(left: 60.0,top: 10.0),
       alignment: Alignment.centerRight,
       child: Container(
         padding: EdgeInsets.all(5.0),
